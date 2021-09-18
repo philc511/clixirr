@@ -9,6 +9,11 @@ class Transaction:
     def __str__(self):
         return self.balance
 
+def xirr(txns):
+    sum = 0
+    for txn in txns:
+        sum += txn.txn_amount
+    return sum
 
 def main(argv):
     txns = []
@@ -18,7 +23,7 @@ def main(argv):
             print(': '.join(row))
             txns.append(Transaction(row[0], row[1], row[2]))
     
-    print(str(txns[0]))
+    print(xirr(txns))
 
 
 if __name__ == "__main__":
