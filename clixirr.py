@@ -27,17 +27,19 @@ def xirr(cashflows,guess=0.1):
     #return optimize.newton(lambda r: xnpv(r,cashflows),guess)
 
 def xirr(txns):
-    sum = 0
+    cashflows=[]
     for txn in txns:
-        sum += txn.txn_amount
-    return sum
+        cashflows.append([txn.txn_date, txn.txn_amount])
+    chron_order = sorted(cashflows, key = lambda x: x[0])
+    t0 = chron_order[0][0]
+    return 0 #xirr(cashflows)
 
 def main(argv):
     txns = []
     with open('txns.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
-            print(': '.join(row))
+            #print(': '.join(row))
             txns.append(Transaction(row[0], row[1], row[2]))
     
     print(xirr(txns))
