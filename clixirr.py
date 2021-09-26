@@ -1,4 +1,4 @@
-import csv, datetime
+import csv, datetime, financial
 
 class Transaction:
     def __init__(self, txn_date, txn_amount, balance):
@@ -28,11 +28,12 @@ def xirr(cashflows,guess=0.1):
 
 def xirr(txns):
     cashflows=[]
-    for txn in txns:
-        cashflows.append([txn.txn_date, txn.txn_amount])
-    chron_order = sorted(cashflows, key = lambda x: x[0])
-    t0 = chron_order[0][0]
-    return 0 #xirr(cashflows)
+#    for txn in txns:
+#        cashflows.append([txn.txn_date, txn.txn_amount])
+    cashflows = [[datetime.date(2019, 4, 13), -100], [datetime.date(2020, 4, 13), 200]]
+    #cashflows.append(['2020-01-10', -100])
+    #cashflows.append(['2021-01-10', 110])
+    return financial.xirr(cashflows)
 
 def main(argv):
     txns = []
