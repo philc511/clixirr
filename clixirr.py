@@ -10,29 +10,11 @@ class Transaction:
         return self.balance
 
 # see https://github.com/peliot/XIRR-and-XNPV/blob/master/financial.py
-def secant_method(tol, f, x0):
-    x1 = x0*1.1
-    while (abs(x1-x0)/abs(x1) > tol):
-        x0, x1 = x1, x1-f(x1)*(x1-x0)/(f(x1)-f(x0))
-    return x1
-
-def xnpv(rate,cashflows):
-    chron_order = sorted(cashflows, key = lambda x: x[0])
-    t0 = chron_order[0][0] #t0 is the date of the first cash flow
-
-    return sum([cf/(1+rate)**((t-t0).days/365.0) for (t,cf) in chron_order])
-
-def xirr(cashflows,guess=0.1):    
-    return secant_method(0.0001,lambda r: xnpv(r,cashflows),guess)
-    #return optimize.newton(lambda r: xnpv(r,cashflows),guess)
 
 def xirr(txns):
     cashflows=[]
-#    for txn in txns:
-#        cashflows.append([txn.txn_date, txn.txn_amount])
-    cashflows = [[datetime.date(2019, 4, 13), -100], [datetime.date(2020, 4, 13), 200]]
-    #cashflows.append(['2020-01-10', -100])
-    #cashflows.append(['2021-01-10', 110])
+    for txn in txns:
+        cashflows.append([txn.txn_date, txn.txn_amount])
     return financial.xirr(cashflows)
 
 def main(argv):
