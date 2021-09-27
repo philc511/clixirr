@@ -8,13 +8,20 @@ class Transaction:
 
     def __str__(self):
         return self.balance
+    
+    def get_cashflow(self):
+        amount = self.txn_amount
+        if amount == 0.0:
+            amount = self.balance
+        return [self.txn_date, amount]
+        
 
 # see https://github.com/peliot/XIRR-and-XNPV/blob/master/financial.py
 
 def xirr(txns):
     cashflows=[]
     for txn in txns:
-        cashflows.append([txn.txn_date, txn.txn_amount])
+        cashflows.append(txn.get_cashflow())
     return financial.xirr(cashflows)
 
 def main(argv):
