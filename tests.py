@@ -1,20 +1,31 @@
 import unittest
+from datetime import date
+from clixirr2 import get_dates
 
 class TestStringMethods(unittest.TestCase):
 
-    def test_get_dates(self):
-        self.assertEqual(get_dates(), 'FOO')
+    def dummy_fn(items):
+        return sum([t[0] for t in items])
+        #return sum(items)
+       
+    # empty cashflows and balances should return empty results 
+    def test_get_dates_all_empty(self):
+        self.assertEqual(get_dates([], [], self.dummy_fn), [])
 
-    def test_isupper(self):
-        self.assertTrue('FOO'.isupper())
-        self.assertFalse('Foo'.isupper())
+    # empty cashflows and non-empty balances should return empty results
+    def test_get_dates_empty_cashflows(self):
+        self.assertEqual(get_dates([], [['2021-01-01',100.0]], self.dummy_fn), [])
 
-    def test_split(self):
-        s = 'hello world'
-        self.assertEqual(s.split(), ['hello', 'world'])
-        # check that s.split fails when the separator is not a string
-        with self.assertRaises(TypeError):
-            s.split(2)
+    # non-empty cashflows and empty balances should return empty results
+    def test_get_dates_empty_balances(self):
+        self.assertEqual(get_dates([['2021-01-01',100.0]], [], self.dummy_fn), [])
+
+    # 1 cashflows and 1 balance should return empty results
+    def test_get_dates_one_balances(self):
+        start = date(2020, 1, 2)
+        end = date(2021, 3, 4)
+        self.assertEqual(get_dates([[start, -10.0]], [[end, 15.0]], self.dummy_fn), [[start, end, 5.0]])
+ 
 
 if __name__ == '__main__':
     unittest.main()
