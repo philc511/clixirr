@@ -11,7 +11,7 @@ def get_dates(cashflows, balances, fun):
             cf = [t for t in cashflows if t[0] >= start_date and t[0] <= txn[0]]
             cf.append([start_date, start_balance])
             cf.append(txn)
-            print(str(start_date), str(txn[0]), fun(cf))
+            results.append([start_date, txn[0], fun(cf)])
             start_date = txn[0]
             start_balance = -txn[1]
     return results
