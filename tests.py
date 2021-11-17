@@ -2,7 +2,7 @@ import unittest
 from datetime import date
 from clixirr2 import get_dates
 
-class TestStringMethods(unittest.TestCase):
+class GetDatesTest(unittest.TestCase):
 
     @staticmethod
     def dummy_fn(items):
@@ -35,7 +35,7 @@ class TestStringMethods(unittest.TestCase):
     # 2020-07-01 8
     # 2021-08-21 16
     # Should give two results, 
-    # 2020-02-01->2020-07-01 7
+    # 2020-02-01->2020-07-01 11
     # 2020-07-01->2021-08-21 12
     def test_get_dates(self):
         cashflows = [
@@ -49,15 +49,55 @@ class TestStringMethods(unittest.TestCase):
                 ]
         results = get_dates(cashflows, balances, self.dummy_fn)
         self.assertEqual(results, [
-            [date(2020,2,1), date(2020,2,1), 7],
+            [date(2020,2,1), date(2020,7,1), 11],
             [date(2020,7,1), date(2021,8,21), 12]
             ])
 
     # two cashflows on same day
+    # cashflows:
+    # 2020-02-01 1
+    # 2020-02-01 2
+    # balances:
+    # 2020-07-01 8
+    # Should give one result, 
+    # 2020-02-01->2020-07-01 11
+    def test_get_dates_cashflows_same_day(self):
+        cashflows = [
+                [date(2020,2,1), 1],
+                [date(2020,2,1), 2],
+                ]
+        balances = [
+                [date(2020,7,1), 8],
+                ]
+        results = get_dates(cashflows, balances, self.dummy_fn)
+        self.assertEqual(results, [
+            [date(2020,2,1), date(2020,7,1), 11]
+            ])
 
     # two balances on the same day
+    def test_get_dates_balances_same_day(self):
+        cashflows = [
+                [date(2020,2,1), 1],
+                ]
+        balances = [
+                [date(2020,7,1), 2],
+                [date(2020,7,1), 4]
+                ]
+        results = get_dates(cashflows, balances, self.dummy_fn)
+        self.assertEqual(results, [
+            [date(2020,2,1), date(2020,7,1), 7]
+            ])
 
-    # cashflow same day as balance
+    # all same day
+    def test_get_dates_all_same_day(self):
+        cashflows = [
+                [date(2020,2,1), 1],
+                ]
+        balances = [
+                [date(2020,2,1), 2],
+                ]
+        results = get_dates(cashflows, balances, self.dummy_fn)
+        self.assertEqual(results, [])
     
 
 if __name__ == '__main__':
