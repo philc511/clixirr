@@ -37,6 +37,21 @@ class TestStringMethods(unittest.TestCase):
     # Should give two results, 
     # 2020-02-01->2020-07-01 7
     # 2020-07-01->2021-08-21 12
+    def test_get_dates(self):
+        cashflows = [
+                [date(2020,2,1), 1],
+                [date(2020,6,17), 2],
+                [date(2021,5,3), 4],
+                ]
+        balances = [
+                [date(2020,7,1), 8],
+                [date(2021,8,21), 16]
+                ]
+        results = get_dates(cashflows, balances, self.dummy_fn)
+        self.assertEqual(results, [
+            [date(2020,2,1), date(2020,2,1), 7],
+            [date(2020,7,1), date(2021,8,21), 12]
+            ])
 
     # two cashflows on same day
 
