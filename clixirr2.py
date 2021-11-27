@@ -19,26 +19,29 @@ def get_dates(cashflows, balances, fun):
             start_date = end_date
     return results
 
-def main(argv):
-    txns = []
-    cashflows = []
-    balances = []
-    with open('txns.csv', newline='') as csvfile:
+def get_dated_items(filename):
+    items = []
+    with open(filename, newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
-            #print(': '.join(row))
             txn_date = datetime.datetime.fromisoformat(row[0])
             amount = float(row[1])
-            balance = float(row[2])
-            if amount != 0.0:
-                cashflows.append([txn_date, amount])
-            else:
-                balances.append([txn_date, balance])
+            items.append([txn_date, amount])
+    # todo sort these
+    return items
 
+def get_date_string(d):
+    return d.strftime("%b-%Y")
+
+def main(argv):
+    cashflows = get_dated_items('txns.csv')
+    balances = get_dated_items('balances.csv')
         
-    print(get_dates(cashflows, balances, financial.xirr))
+    results = get_dates(cashflows, balances, financial.xirr)
+    for r in results:
+        print(get_date_string(r[0]), ",", get_date_string(r[1]), ",", format(r[2], ".1%"))
     cashflows.append(balances[-1])
-    print(financial.xirr(cashflows))
+    print(get_date_string(results[0][0]), ",", get_date_string(results[-1][1]), ",", format(financial.xirr(cashflows), ".1%"))
 
 
 if __name__ == "__main__":
