@@ -1,4 +1,4 @@
-import csv, datetime, financial
+import csv, datetime, financial, sys
 
 # see https://github.com/peliot/XIRR-and-XNPV/blob/master/financial.py
 
@@ -15,7 +15,11 @@ def get_dates(cashflows, balances, fun):
             cf.extend([[b[0], -b[1]] for b in balances if b[0] == start_date])
             # add all balances on end date
             cf.extend([b for b in balances if b[0] == end_date])
-            results.append([start_date, end_date, fun(cf)])
+            answer = fun(cf)
+            if (answer != answer):
+                print("NAN ALERT for this input array:")
+                print(cf)
+            results.append([start_date, end_date, answer])
             start_date = end_date
     return results
 
@@ -33,9 +37,9 @@ def get_dated_items(filename):
 def get_date_string(d):
     return d.strftime("%b-%Y")
 
-def main(argv):
-    cashflows = get_dated_items('txns.csv')
-    balances = get_dated_items('balances.csv')
+def main(txn_file, balance_file):
+    cashflows = get_dated_items(txn_file)
+    balances = get_dated_items(balance_file)
         
     results = get_dates(cashflows, balances, financial.xirr)
     for r in results:
@@ -45,4 +49,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-   main(['-isource'])    
+   main(sys.argv[1], sys.argv[2])    
