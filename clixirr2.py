@@ -26,7 +26,7 @@ def get_dates(cashflows, balances, fun):
 def get_dated_items(filename):
     items = []
     with open(filename, newline='') as csvfile:
-        spamreader = csv.reader(csvfile, delimiter=',')
+        spamreader = csv.reader(filter(lambda row: row[0]!='#', csvfile), delimiter=',')
         for row in spamreader:
             txn_date = datetime.datetime.fromisoformat(row[0])
             amount = float(row[1])
