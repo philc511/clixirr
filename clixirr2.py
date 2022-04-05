@@ -49,4 +49,6 @@ def main(txn_file, balance_file):
 
 
 if __name__ == "__main__":
-   main(sys.argv[1], sys.argv[2])    
+    txn_file = sys.argv[1] + "Txns.csv"
+    balance_file = sys.argv[1] + "Bals.csv"
+    main(txn_file, balance_file)
