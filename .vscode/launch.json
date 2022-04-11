@@ -5,8 +5,8 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
-            "args": ["txns.csv", "balances.csv"],
+            "program": "clixirr2.py",
+            "args": ["test"],
             "console": "integratedTerminal"
         }
     ]
